@@ -6,6 +6,7 @@ import type { ButtonHTMLAttributes } from "react"
 type FlowButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   text?: string
   variant?: "dark" | "light"
+  keepRounded?: boolean
 }
 
 export function FlowButton({
@@ -13,6 +14,7 @@ export function FlowButton({
   variant = "dark",
   className = "",
   type = "button",
+  keepRounded = false,
   ...props
 }: FlowButtonProps) {
   const isLight = variant === "light"
@@ -20,7 +22,9 @@ export function FlowButton({
   return (
     <button
       type={type}
-      className={`group relative flex cursor-pointer items-center gap-1 overflow-hidden rounded-[100px] border-[1.5px] bg-transparent px-8 py-3 text-sm font-semibold transition-all duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:rounded-[12px] hover:border-transparent hover:text-white active:scale-[0.95] ${
+      className={`group relative flex cursor-pointer items-center gap-1 overflow-hidden rounded-[100px] border-[1.5px] bg-transparent px-8 py-3 text-sm font-semibold transition-all duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)] ${
+        keepRounded ? "hover:rounded-[100px]" : "hover:rounded-[12px]"
+      } hover:border-transparent hover:text-white active:scale-[0.95] ${
         isLight
           ? "border-white bg-white text-[#111111]"
           : "border-[#333333]/40 text-[#111111]"

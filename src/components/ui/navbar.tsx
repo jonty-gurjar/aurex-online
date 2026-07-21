@@ -59,7 +59,7 @@ export default function Navbar({
   },
   menu = defaultMenu,
   auth = {
-    login: { text: "Login", url: "#" },
+    login: { text: "Login", url: "/login" },
   },
 }: NavbarProps) {
   const [openSearch, setOpenSearch] = React.useState(false)

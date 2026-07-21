@@ -11,11 +11,16 @@ import NewFeaturedPage from '@/page/NewFeaturedPage'
 import GiftPage from '@/page/GiftPage'
 import ProductDetailsPage from '@/page/ProductDetailsPage'
 import CartPage from '@/page/CartPage'
+import LoginPage from '@/page/LoginPage'
 import FashionFooter from '@/components/FashionFooter'
 import Navbar from '@/components/ui/navbar'
 
 const App = () => {
   const pathname = window.location.pathname.replace(/\/+$/, '') || '/'
+
+  if (pathname === '/login') {
+    return <LoginPage />
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
