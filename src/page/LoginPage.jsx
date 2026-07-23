@@ -11,6 +11,10 @@ export default function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    // Simulated redirect after login animation completes
+    setTimeout(() => {
+      window.location.href = '/'
+    }, 2500)
   }
 
   return (
@@ -100,7 +104,7 @@ export default function LoginPage() {
                 text={isSignUp ? 'Sign Up' : 'Login'}
                 loadingText={isSignUp ? 'Creating Account...' : 'Logging in...'}
                 successText={isSignUp ? 'Account Created!' : 'Success!'}
-                classes="w-full py-3 !bg-black !text-white border-black shadow-md"
+                classes="w-full py-2.5 border-gray-200 shadow-sm"
               />
             </div>
           </form>
