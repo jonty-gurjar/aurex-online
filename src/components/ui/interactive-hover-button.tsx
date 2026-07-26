@@ -18,13 +18,12 @@ function cn(...inputs: any[]) {
   return twMerge(clsx(inputs))
 }
 
-interface InteractiveHoverButtonProps {
+interface InteractiveHoverButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text?: string
   loadingText?: string
   successText?: string
   classes?: string
   type?: 'button' | 'submit' | 'reset'
-  onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export default function InteractiveHoverButton({

@@ -23,12 +23,12 @@ import minimalImage from '@/assets/Minimal.jpg'
 import { FlowButton } from '@/components/ui/flow-button'
 
 const categories = [
-  { name: 'Dresses', image: weddingImage, position: 'center' },
-  { name: 'Tops', image: topsImage, position: 'center' },
-  { name: 'Jackets', image: jacketsImage, position: '62% center' },
-  { name: 'Jeans', image: jeansImage, position: 'center' },
-  { name: 'Shirts', image: rusticImage, position: 'center' },
-  { name: 'Rings', image: ringsImage, position: 'center' },
+  { name: 'Dresses', image: weddingImage, position: 'center', href: '/product-details?product=shirts' },
+  { name: 'Tops', image: topsImage, position: 'center', href: '/product-details?product=tshirts' },
+  { name: 'Jackets', image: jacketsImage, position: '62% center', href: '/product-details?product=jackets' },
+  { name: 'Jeans', image: jeansImage, position: 'center', href: '/product-details?product=jeans' },
+  { name: 'Shirts', image: rusticImage, position: 'center', href: '/product-details?product=shirts' },
+  { name: 'Rings', image: ringsImage, position: 'center', href: '/product-details?product=accessories' },
 ]
 
 const newArrivals = [
@@ -176,7 +176,7 @@ export default function WomenPage() {
           <h2 className="mt-2 text-4xl font-black uppercase tracking-tight sm:text-5xl">Shop by category</h2>
           <div className="mt-10 grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-6">
             {categories.map((category) => (
-              <a href="#new-arrivals" key={category.name} className="group">
+              <a href={category.href} key={category.name} className="group">
                 <div className="aspect-[3/4] overflow-hidden bg-[#f5f2ed]">
                   <img
                     src={category.image}

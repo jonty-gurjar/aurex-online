@@ -55,7 +55,24 @@ import accessoriesProductImage from '@/assets/Sunglass-Dark-Green.jpg'
 import sunglassProductImage from '@/assets/Sunglass-Dark-Green-1.jpeg'
 import sunglassFaceImage from '@/assets/Sunglass-Dark-Green-2.jpeg'
 import sunglassBoxImage from '@/assets/Sunglass-Dark-Green-3.jpeg'
+import womenTopsImage from '@/assets/Tops.jpg'
+import womenDressesImage from '@/assets/Dresses.jpg'
+import womenJacketsImage from '@/assets/Women Leather Jacket.jpg'
+import womenJeansImage from '@/assets/Women Jeans.jpg'
+import womenShirtsImage from '@/assets/Women Shirt.jpg'
+import ringsImage from '@/assets/Rings.jpg'
 
+const CART_STORAGE_KEY = 'aurex_cart_items'
+const INITIAL_SHOPPING_BAG = []
+
+function loadStoredCart() {
+  try {
+    const data = localStorage.getItem(CART_STORAGE_KEY)
+    return data ? JSON.parse(data) : INITIAL_SHOPPING_BAG
+  } catch {
+    return INITIAL_SHOPPING_BAG
+  }
+}
 
 const sizes = ['S', 'M', 'L', 'XL', 'XXL']
 const initialDeliveryCountdown = (2 * 60 * 60) + (30 * 60) + 25
@@ -180,6 +197,15 @@ const detailPoints = [
   'Unisex style',
 ]
 
+const shopCategories = [
+  { name: 'Dresses', image: womenDressesImage, position: 'center', href: '/product-details?product=shirts' },
+  { name: 'Tops', image: womenTopsImage, position: 'center', href: '/product-details?product=tshirts' },
+  { name: 'Jackets', image: womenJacketsImage, position: '62% center', href: '/product-details?product=jackets' },
+  { name: 'Jeans', image: womenJeansImage, position: 'center', href: '/product-details?product=jeans' },
+  { name: 'Shirts', image: womenShirtsImage, position: 'center', href: '/product-details?product=shirts' },
+  { name: 'Rings', image: ringsImage, position: 'center', href: '/product-details?product=accessories' },
+]
+
 const relatedProducts = [
   { name: 'Minimal Hoodie', price: '₹4,599', image: creamHoodieImage },
   { name: 'Classic Sweatshirt', price: '₹4,199', image: sweatshirtImage },
@@ -198,6 +224,43 @@ function formatCountdown(totalSeconds) {
 export default function ProductDetailsPage() {
   const productKey = new URLSearchParams(window.location.search).get('product') || 'tshirts'
   const product = productCatalog[productKey] || productCatalog.tshirts
+
+  const [cartItems, setCartItems] = useState(loadStoredCart)
+  const [isCartOpen, setIsCartOpen] = useState(false)
+
+  // Keep localStorage in sync
+  useEffect(() => {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems))
+  }, [cartItems])
+
+  const handleAddToCart = () => {
+    const cartItem = {
+      name: product.title,
+      size: selectedSize,
+      color: product.colorName,
+      quantity: 1,
+      price: product.price,
+      image: activeImage.image,
+    }
+
+    setCartItems((prevItems) => {
+      const existingIndex = prevItems.findIndex(
+        (item) => item.name === cartItem.name && item.size === cartItem.size
+      )
+
+      let updated
+      if (existingIndex > -1) {
+        updated = prevItems.map((item, idx) =>
+          idx === existingIndex ? { ...item, quantity: item.quantity + 1 } : item
+        )
+      } else {
+        updated = [...prevItems, cartItem]
+      }
+      return updated
+    })
+
+    setIsCartOpen(true)
+  }
   const gallery = product.gallery
   const [selectedSize, setSelectedSize] = useState('S')
   const [activeImageIndex, setActiveImageIndex] = useState(0)
@@ -391,7 +454,8 @@ export default function ProductDetailsPage() {
             <div className="mt-6 flex gap-4">
               <FlowButton
                 text="Add to Cart"
-                className="min-h-16 flex-1 justify-center !rounded-full !border-black !bg-black text-base font-bold !text-white hover:!rounded-full [&>span:first-of-type]:!text-white [&_svg]:!stroke-white"
+                onClick={handleAddToCart}
+                className="min-h-16 flex-1 justify-center !rounded-full !border-black !bg-black text-base font-bold !text-white hover:!rounded-full [&>span:first-of-type]:!text-white [&_svg]:!stroke-white cursor-pointer"
               />
               <button
                 type="button"
@@ -479,6 +543,35 @@ export default function ProductDetailsPage() {
           </div>
         </section>
 
+        <section className="border-t border-black/10 py-16 lg:py-20">
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.25em] text-black/45">Explore the edit</p>
+              <h2 className="mt-2 text-3xl font-black uppercase tracking-tight sm:text-5xl">Shop by category</h2>
+            </div>
+            <a href="/women" className="text-sm font-bold uppercase tracking-wider">
+              View all
+            </a>
+          </div>
+
+          <div className="mt-10 grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-6">
+            {shopCategories.map((category) => (
+              <a href={category.href} key={category.name} className="group">
+                <div className="aspect-[3/4] overflow-hidden bg-[#f5f2ed]">
+                  <img
+                    src={category.image}
+                    alt=""
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    style={{ objectPosition: category.position }}
+                  />
+                </div>
+                <h3 className="mt-3 text-sm font-bold uppercase tracking-[0.1em]">{category.name}</h3>
+              </a>
+            ))}
+          </div>
+        </section>
+
         <section className="pb-16 lg:pb-20">
           <div className="flex items-center justify-between gap-4">
             <h2 className="text-3xl font-black tracking-tight">You May Also Like</h2>
@@ -503,6 +596,154 @@ export default function ProductDetailsPage() {
             ))}
           </div>
         </section>
+      </div>
+
+      {/* Cart Drawer */}
+      <div
+        className={`fixed inset-0 z-50 transition-opacity duration-300 ${
+          isCartOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        {/* Backdrop overlay */}
+        <div
+          onClick={() => setIsCartOpen(false)}
+          className="absolute inset-0 bg-black/50 backdrop-blur-[2px] cursor-pointer"
+        />
+
+        {/* Drawer container */}
+        <div
+          className={`absolute right-0 top-0 bottom-0 w-full max-w-[440px] bg-white text-[#161b1f] shadow-2xl flex flex-col transition-transform duration-300 ease-out ${
+            isCartOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          {/* Drawer Header */}
+          <div className="flex items-center justify-between border-b border-black/10 px-6 py-5">
+            <h2 className="text-xl font-bold">Shopping Bag ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})</h2>
+            <button
+              onClick={() => setIsCartOpen(false)}
+              className="p-1 text-black/55 hover:text-black transition cursor-pointer"
+            >
+              <svg className="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Drawer Body (Scrollable list) */}
+          <div className="flex-1 overflow-y-auto px-6 py-4">
+            {cartItems.length > 0 ? (
+              <ul className="divide-y divide-black/10">
+                {cartItems.map((item, idx) => {
+                  const itemPrice = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0
+                  const itemTotalFormatted = (itemPrice * item.quantity).toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                  return (
+                    <li key={`${item.name}-${item.size}-${idx}`} className="flex gap-4 py-5">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="h-24 w-18 object-cover object-top rounded-md bg-black/5"
+                      />
+                      <div className="flex-1 flex flex-col justify-between">
+                        <div>
+                          <div className="flex justify-between gap-2">
+                            <h3 className="text-sm font-bold line-clamp-1">{item.name}</h3>
+                            <p className="text-sm font-semibold text-right">₹{itemTotalFormatted}</p>
+                          </div>
+                          <p className="text-xs text-black/45 mt-1">Size: {item.size} | Color: {item.color}</p>
+                        </div>
+                        <div className="flex items-center justify-between mt-2">
+                          {/* Qty select */}
+                          <div className="flex items-center gap-2 border border-black/10 px-2 py-0.5 rounded">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = cartItems.map((itm, i) =>
+                                  i === idx ? { ...itm, quantity: Math.max(0, itm.quantity - 1) } : itm
+                                ).filter(itm => itm.quantity > 0)
+                                setCartItems(updated)
+                              }}
+                              className="text-sm font-semibold text-black/50 hover:text-black cursor-pointer px-1"
+                            >
+                              -
+                            </button>
+                            <span className="text-xs font-semibold w-4 text-center">{item.quantity}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = cartItems.map((itm, i) =>
+                                  i === idx ? { ...itm, quantity: itm.quantity + 1 } : itm
+                                )
+                                setCartItems(updated)
+                              }}
+                              className="text-sm font-semibold text-black/50 hover:text-black cursor-pointer px-1"
+                            >
+                              +
+                            </button>
+                          </div>
+                          {/* Remove button */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = cartItems.filter((_, i) => i !== idx)
+                              setCartItems(updated)
+                            }}
+                            className="text-xs text-red-600 hover:underline cursor-pointer"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  )
+                })}
+              </ul>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center py-12 text-center">
+                <p className="text-sm text-black/45">Your shopping bag is empty.</p>
+                <button
+                  onClick={() => setIsCartOpen(false)}
+                  className="mt-4 text-xs font-bold uppercase tracking-wider underline cursor-pointer"
+                >
+                  Shop Now
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Drawer Footer */}
+          {cartItems.length > 0 && (
+            <div className="border-t border-black/10 px-6 py-6 bg-black/[0.01]">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-sm font-medium text-black/60">Subtotal</span>
+                <span className="text-lg font-bold">
+                  ₹
+                  {cartItems.reduce((sum, item) => {
+                    const priceNum = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0
+                    return sum + priceNum * item.quantity
+                  }, 0).toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
+              </div>
+              <a
+                href="/cart"
+                className="block w-full text-center bg-[#161b1f] hover:bg-black text-white text-xs font-bold uppercase py-4 tracking-wider transition rounded-full mb-3"
+              >
+                Checkout
+              </a>
+              <button
+                onClick={() => setIsCartOpen(false)}
+                className="block w-full text-center text-xs font-bold uppercase py-2 tracking-wider hover:underline cursor-pointer"
+              >
+                Continue Shopping
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </main>
   )

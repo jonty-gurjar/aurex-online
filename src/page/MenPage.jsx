@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 
 import heroImage from '@/assets/MenPage.jpg'
-import menEditorialImage from '@/assets/Trousers.jpg'
+import menEditorialImage from '@/assets/Trousers-3.avif'
 import streetImage from '@/assets/Hoodlie.jpg'
 import streetwearImage from '@/assets/Streetwear.jpg'
 import boldImage from '@/assets/pexels-cottonbro-10679204.jpg'

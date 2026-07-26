@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import aurexLogo from '@/assets/Aurex.png'
-import loginArt from '@/assets/login_art.png'
+import loginVideo from '@/assets/Aurex (1).mp4'
 import InteractiveHoverButton from '@/components/ui/interactive-hover-button'
 
 export default function LoginPage() {
@@ -18,26 +18,29 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#e8e6e1] flex items-center justify-center p-4 sm:p-6 md:p-10 font-sans">
-      <div className="w-full max-w-[960px] bg-white rounded-[32px] shadow-2xl p-4 sm:p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        {/* Left Side: Artistic Botanical Image */}
-        <div className="relative w-full h-[320px] md:h-[580px] rounded-[24px] overflow-hidden bg-[#d9d5ce] flex items-center justify-center">
-          <img
-            src={loginArt}
-            alt="Artistic botanical sculpture"
-            className="w-full h-full object-cover"
+    <div className="h-screen overflow-hidden bg-[#e8e6e1] flex items-center justify-center p-3 sm:p-4 md:p-6 font-sans">
+      <div className="w-full max-w-[960px] max-h-full overflow-hidden bg-white rounded-[32px] shadow-2xl p-4 sm:p-5 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 items-center">
+        {/* Left Side: Brand Video */}
+        <div className="relative hidden w-full rounded-[24px] overflow-hidden bg-[#d9d5ce] md:flex md:h-[min(580px,calc(100vh-112px))] items-center justify-center">
+          <video
+            src={loginVideo}
+            className="h-full w-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
           />
         </div>
 
         {/* Right Side: Login Form */}
         <div className="w-full max-w-[380px] mx-auto py-2 flex flex-col justify-center">
           {/* Logo & Brand */}
-          <div className="flex items-center justify-center gap-2 mb-6">
+          <div className="flex items-center justify-center gap-2 mb-4 md:mb-6">
             <img src={aurexLogo} alt="Aurex" className="h-7 w-auto" />
           </div>
 
           {/* Heading */}
-          <div className="text-center mb-6">
+          <div className="text-center mb-4 md:mb-6">
             <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
               {isSignUp ? 'Create an account' : 'Login to your account'}
             </h1>
@@ -49,7 +52,7 @@ export default function LoginPage() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
             <div>
               <label className="block text-xs font-medium text-gray-400 mb-1">
                 Email
@@ -104,13 +107,13 @@ export default function LoginPage() {
                 text={isSignUp ? 'Sign Up' : 'Login'}
                 loadingText={isSignUp ? 'Creating Account...' : 'Logging in...'}
                 successText={isSignUp ? 'Account Created!' : 'Success!'}
-                classes="w-full py-2.5 border-gray-200 shadow-sm"
+                classes="w-full bg-black py-2.5 text-white border-black shadow-sm hover:bg-black"
               />
             </div>
           </form>
 
           {/* Social Divider */}
-          <div className="relative my-6 text-center">
+          <div className="relative my-4 md:my-6 text-center">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-200"></div>
             </div>
@@ -125,8 +128,12 @@ export default function LoginPage() {
               type="button"
               className="w-full flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-full bg-[#f2f1ef] hover:bg-[#e7e5e1] text-gray-800 font-medium text-xs sm:text-sm transition-colors"
             >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 170 170">
-                <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.34.13-9.13-1.9-14.37-6.08-3.48-2.82-7.46-7.55-11.96-14.18-7.3-10.74-13-22.56-17.1-35.47-4.1-12.9-6.15-24.96-6.15-36.18 0-15.86 3.97-29.08 11.9-39.67 7.94-10.59 17.88-15.99 29.83-16.2 4.47 0 9.49 1.15 15.06 3.47 5.58 2.31 9.38 3.52 11.4 3.63 1.79 0 5.69-1.26 11.7-3.79 6.01-2.54 11.07-3.74 15.19-3.6 11.06.84 20.06 4.97 27 12.38-9.87 5.96-14.7 14.3-14.5 25.04.22 8.37 3.42 15.42 9.61 21.14 6.18 5.72 13.56 8.95 22.14 9.68-2.3 6.9-5.1 13.39-8.4 19.46zM119.22 31.08c0-7.04 2.54-13.8 7.62-20.28 5.08-6.49 11.45-10.28 19.11-11.38.78 7.26-1.57 14.12-7.05 20.58-5.48 6.46-11.91 10.15-19.28 11.08h-.4c0-.52 0-.96 0-1.32z" />
+              <svg
+                className="h-[18px] w-[18px] shrink-0 fill-current"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M17.05 12.08c-.03-2.95 2.41-4.37 2.52-4.44-1.38-2.02-3.52-2.29-4.27-2.32-1.8-.19-3.55 1.08-4.46 1.08-.93 0-2.33-1.06-3.84-1.03-1.95.03-3.77 1.16-4.77 2.93-2.06 3.57-.53 8.81 1.45 11.7.99 1.42 2.14 3 3.66 2.94 1.48-.06 2.03-.94 3.82-.94 1.77 0 2.29.94 3.84.91 1.6-.03 2.6-1.42 3.55-2.85 1.14-1.63 1.59-3.24 1.61-3.32-.04-.01-3.08-1.18-3.11-4.66zM14.13 3.41c.8-.99 1.34-2.34 1.2-3.71-1.16.05-2.61.8-3.44 1.76-.74.86-1.4 2.27-1.23 3.58 1.3.1 2.64-.66 3.47-1.63z" />
               </svg>
               <span>Sign in with Apple</span>
             </button>
@@ -135,7 +142,11 @@ export default function LoginPage() {
               type="button"
               className="w-full flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-full bg-[#f2f1ef] hover:bg-[#e7e5e1] text-gray-800 font-medium text-xs sm:text-sm transition-colors"
             >
-              <svg className="w-4 h-4" viewBox="0 0 24 24">
+              <svg
+                className="h-[18px] w-[18px] shrink-0"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path
                   fill="#EA4335"
                   d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.2 9 5 12 5z"
@@ -158,7 +169,7 @@ export default function LoginPage() {
           </div>
 
           {/* Switch Sign in / Sign up */}
-          <div className="mt-6 text-center text-xs text-gray-500">
+          <div className="mt-4 md:mt-6 text-center text-xs text-gray-500">
             {isSignUp ? (
               <>
                 Already have an account?{' '}
